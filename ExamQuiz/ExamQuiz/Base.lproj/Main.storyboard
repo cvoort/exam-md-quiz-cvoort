@@ -29,18 +29,27 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Verberg Antwoord"/>
+                                <connections>
+                                    <action selector="DidTapHideAnswerController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oq9-5R-ifL"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvh-cm-iH3">
                                 <rect key="frame" x="214" y="410" width="163" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Volgende Vraag"/>
+                                <connections>
+                                    <action selector="DidTapNextQuestionController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wqU-8d-3sy"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r9D-3N-Dwr">
                                 <rect key="frame" x="214" y="500" width="163" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Liedjes"/>
+                                <connections>
+                                    <action selector="DidTapBlueController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lwA-nd-ZfP"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vlu-PR-vXP">
                                 <rect key="frame" x="73" y="590" width="247" height="45"/>
@@ -48,6 +57,9 @@
                                 <color key="tintColor" systemColor="systemOrangeColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Spreekwoorden en gezegden"/>
+                                <connections>
+                                    <action selector="DidTapOrangeController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="I5q-sy-GoG"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HzA-CP-mQB">
                                 <rect key="frame" x="16" y="680" width="163" height="45"/>
@@ -55,6 +67,9 @@
                                 <color key="tintColor" systemColor="systemYellowColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Allerlei"/>
+                                <connections>
+                                    <action selector="DidTapYellowController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Ck-rQ-NHG"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I68-NX-8mY">
                                 <rect key="frame" x="214" y="680" width="163" height="45"/>
@@ -62,12 +77,18 @@
                                 <color key="tintColor" systemColor="systemGreenColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Natuur"/>
+                                <connections>
+                                    <action selector="DidTapGreenController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CiV-tR-5ZP"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zeR-oI-Yvr">
-                                <rect key="frame" x="101" y="763" width="159" height="35"/>
+                                <rect key="frame" x="101" y="749" width="159" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Toon Categorieën"/>
+                                <connections>
+                                    <action selector="DidTapShowCategoryController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZUv-ml-XRJ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Vr-lP-my3">
                                 <rect key="frame" x="16" y="500" width="163" height="45"/>
@@ -75,6 +96,9 @@
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Taal"/>
+                                <connections>
+                                    <action selector="DidTapRedController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="60m-Nc-DGc"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Antwoord" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="90e-Z2-ydE">
                                 <rect key="frame" x="146" y="243" width="101" height="29"/>
@@ -90,10 +114,33 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uax-B4-CcD">
+                                <rect key="frame" x="89" y="733" width="182" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Verberg Categorieën"/>
+                                <connections>
+                                    <action selector="DidTapHideCategoryController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YKG-TT-O4f"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="AnswerField" destination="nZR-7L-vIG" id="rWA-CT-gSC"/>
+                        <outlet property="AnswerLabel" destination="90e-Z2-ydE" id="a6j-r9-zSX"/>
+                        <outlet property="BlueButton" destination="r9D-3N-Dwr" id="Fq9-KT-drA"/>
+                        <outlet property="GreenButton" destination="I68-NX-8mY" id="Keu-WH-4ZO"/>
+                        <outlet property="HideAnswerButton" destination="suW-ho-89M" id="oir-5E-Shs"/>
+                        <outlet property="HideCategoryButton" destination="uax-B4-CcD" id="kPf-Uq-dCh"/>
+                        <outlet property="NextQuestionButton" destination="Cvh-cm-iH3" id="LLh-36-T72"/>
+                        <outlet property="OrangeButton" destination="vlu-PR-vXP" id="8we-i7-Oah"/>
+                        <outlet property="QuestionField" destination="cZ4-Co-eJR" id="PZi-0j-oOx"/>
+                        <outlet property="RedButton" destination="6Vr-lP-my3" id="o6p-eB-xPu"/>
+                        <outlet property="ShowCategoryButton" destination="zeR-oI-Yvr" id="9eQ-vD-ea7"/>
+                        <outlet property="YellowButton" destination="HzA-CP-mQB" id="l5w-9j-y8i"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
