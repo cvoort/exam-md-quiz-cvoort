@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		55638C992FC5AC2200DB3F08 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 55638C982FC5AC2200DB3F08 /* SwiftyJSON */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		559A41F02FB4936C004676AC /* ExamQuiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExamQuiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55638C992FC5AC2200DB3F08 /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = ExamQuiz;
 			packageProductDependencies = (
+				55638C982FC5AC2200DB3F08 /* SwiftyJSON */,
 			);
 			productName = ExamQuiz;
 			productReference = 559A41F02FB4936C004676AC /* ExamQuiz.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 559A41E72FB4936C004676AC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				55638C972FC5AC2200DB3F08 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 559A41F12FB4936C004676AC /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		55638C972FC5AC2200DB3F08 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		55638C982FC5AC2200DB3F08 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 55638C972FC5AC2200DB3F08 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 559A41E82FB4936C004676AC /* Project object */;
 }
