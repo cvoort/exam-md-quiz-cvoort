@@ -9,13 +9,6 @@ import UIKit
 
 import SwiftyJSON
 
-struct Question {
-    let category: String
-    let qaNumber: Int
-    let question: String
-    let answer: String
-}
-
 class ViewController: UIViewController {
     
     @IBOutlet weak var RedButton: UIButton!
@@ -37,7 +30,7 @@ class ViewController: UIViewController {
     var quizQuestions: Array<[String: Any]> = []
     var categoryQuestions: Array<[String: Any]> = []
     var currentCategory: String = ""
-    var i: Int = 0
+    var questionCounter: Int = 0
     var isAnswerHidden: Bool = false
     
     override func viewDidLoad() {
@@ -62,46 +55,66 @@ class ViewController: UIViewController {
 
     @IBAction func DidTapYellowController(_ sender: UIButton) {
         categoryQuestions = quizQuestions.filter { $0["category"] as! String == "yellow" }
+        if currentCategory != "yellow" {
+            questionCounter = 0
+        }
         currentCategory = "yellow"
-//        showQuestion()
         self.resetButtons()
         self.setCategoryClasses()
+        self.showQuestion()
     }
     
     @IBAction func DidTapRedController(_ sender: UIButton) {
         categoryQuestions = quizQuestions.filter { $0["category"] as! String == "red" }
+        if currentCategory != "red" {
+            questionCounter = 0
+        }
         currentCategory = "red"
-        //        showQuestion()
         self.resetButtons()
         self.setCategoryClasses()
+        self.showQuestion()
     }
     
     @IBAction func DidTapBlueController(_ sender: UIButton) {
         categoryQuestions = quizQuestions.filter { $0["category"] as! String == "blue" }
+        if currentCategory != "blue" {
+            questionCounter = 0
+        }
         currentCategory = "blue"
-        //        showQuestion()
         self.resetButtons()
         self.setCategoryClasses()
+        self.showQuestion()
     }
     
     @IBAction func DidTapOrangeController(_ sender: UIButton) {
         categoryQuestions = quizQuestions.filter { $0["category"] as! String == "orange" }
+        if currentCategory != "orange" {
+            questionCounter = 0
+        }
         currentCategory = "orange"
-        //        showQuestion()
         self.resetButtons()
         self.setCategoryClasses()
+        self.showQuestion()
     }
     
     @IBAction func DidTapGreenController(_ sender: UIButton) {
         categoryQuestions = quizQuestions.filter { $0["category"] as! String == "green" }
+        if currentCategory != "green" {
+            questionCounter = 0
+        }
         currentCategory = "green"
-        //        showQuestion()
         self.resetButtons()
         self.setCategoryClasses()
+        showQuestion()
     }
     
     @IBAction func DidTapNextQuestionController(_ sender: UIButton) {
-        i += 1
+        if questionCounter < (categoryQuestions.count - 1) {
+            questionCounter += 1
+        } else {
+            questionCounter = 0
+        }
+        self.showQuestion()
     }
     
     @IBAction func DidTapHideAnswerController(_ sender: UIButton) {
@@ -135,7 +148,7 @@ class ViewController: UIViewController {
         HideCategoryButton.isHidden = false
     }
     
-    func setCategoryClasses() {
+    private func setCategoryClasses() {
         QuestionField.textColor = .black
         ShowCategoryButton.isHidden = false
         HideCategoryButton.isHidden = true
@@ -165,7 +178,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func resetButtons() {
+    private func resetButtons() {
         RedButton.isHidden = true
         OrangeButton.isHidden = true
         YellowButton.isHidden = true
@@ -180,6 +193,13 @@ class ViewController: UIViewController {
         
         QuestionField.backgroundColor = .black
         QuestionField.textColor = .white
+    }
+    
+    private func showQuestion() {
+        let question = categoryQuestions[questionCounter]
+        
+        QuestionField.text = question["question"] as? String
+        AnswerField.text = question["answer"] as? String
     }
 }
 
