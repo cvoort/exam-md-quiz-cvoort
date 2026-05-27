@@ -9,7 +9,14 @@ import UIKit
 
 import SwiftyJSON
 
-class ViewController: UIViewController {
+enum State {
+    case category
+    case question
+    case answer
+    case score
+}
+
+class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var RedButton: UIButton!
     @IBOutlet weak var BlueButton: UIButton!
@@ -27,93 +34,79 @@ class ViewController: UIViewController {
     @IBOutlet weak var AnswerLabel: UILabel!
     @IBOutlet weak var QuestionField: UILabel!
     
+    @IBOutlet weak var AnswerInput: UITextField!
+    
     var quizQuestions: Array<[String: Any]> = []
     var categoryQuestions: Array<[String: Any]> = []
     var currentCategory: String = ""
     var questionCounter: Int = 0
     var isAnswerHidden: Bool = false
     
+    var answerIsCorrect: Bool = false
+    var correctAnswerCount: Int = 0
+    
+    var state: State = .category
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        guard let jsonPath = Bundle.main.path(forResource: "localQuizData", ofType: "json") else { return }
-        let url = URL(fileURLWithPath: jsonPath)
-        do {
-            let data = try Data(contentsOf: url)
-            if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>] {
-                quizQuestions = jsonArray
-//                print(quizQuestions)
-            } else {
-                print("bad json")
-            }
-        } catch {
-            print(error)
-        }
-        
-        ShowCategoryButton.isHidden = true
+        self.setupJsonData()
+        self.updateUI()
     }
 
     @IBAction func DidTapYellowController(_ sender: UIButton) {
-        categoryQuestions = quizQuestions.filter { $0["category"] as! String == "yellow" }
-        if currentCategory != "yellow" {
-            questionCounter = 0
-        }
-        currentCategory = "yellow"
-        self.resetButtons()
+        self.switchCategory(newCategory: "yellow")
         self.setCategoryClasses()
+        self.updateUI()
         self.showQuestion()
     }
     
     @IBAction func DidTapRedController(_ sender: UIButton) {
-        categoryQuestions = quizQuestions.filter { $0["category"] as! String == "red" }
-        if currentCategory != "red" {
-            questionCounter = 0
-        }
-        currentCategory = "red"
-        self.resetButtons()
+        self.switchCategory(newCategory: "red")
         self.setCategoryClasses()
+        self.updateUI()
         self.showQuestion()
     }
     
     @IBAction func DidTapBlueController(_ sender: UIButton) {
-        categoryQuestions = quizQuestions.filter { $0["category"] as! String == "blue" }
-        if currentCategory != "blue" {
-            questionCounter = 0
-        }
-        currentCategory = "blue"
-        self.resetButtons()
+        self.switchCategory(newCategory: "blue")
         self.setCategoryClasses()
+        self.updateUI()
         self.showQuestion()
     }
     
     @IBAction func DidTapOrangeController(_ sender: UIButton) {
-        categoryQuestions = quizQuestions.filter { $0["category"] as! String == "orange" }
-        if currentCategory != "orange" {
-            questionCounter = 0
-        }
-        currentCategory = "orange"
-        self.resetButtons()
+        self.switchCategory(newCategory: "orange")
         self.setCategoryClasses()
+        self.updateUI()
         self.showQuestion()
     }
     
     @IBAction func DidTapGreenController(_ sender: UIButton) {
-        categoryQuestions = quizQuestions.filter { $0["category"] as! String == "green" }
-        if currentCategory != "green" {
-            questionCounter = 0
-        }
-        currentCategory = "green"
-        self.resetButtons()
+        self.switchCategory(newCategory: "green")
         self.setCategoryClasses()
-        showQuestion()
+        self.updateUI()
+        self.showQuestion()
+    }
+    
+    func switchCategory(newCategory: String) {
+        categoryQuestions = quizQuestions.filter { $0["category"] as! String == newCategory }
+        if currentCategory != newCategory {
+            questionCounter = 0
+            correctAnswerCount = 0
+        }
+        currentCategory = newCategory
+        state = .question
     }
     
     @IBAction func DidTapNextQuestionController(_ sender: UIButton) {
         if questionCounter < (categoryQuestions.count - 1) {
             questionCounter += 1
+            state = .question
         } else {
-            questionCounter = 0
+            state = .score
         }
+        self.updateUI()
         self.showQuestion()
     }
     
@@ -122,84 +115,257 @@ class ViewController: UIViewController {
         if isAnswerHidden == true {
             isAnswerHidden = false
             AnswerField.isHidden = false
+            state = .answer
+            answerIsCorrect = false
+            
+            // Label becomes
             HideAnswerButton.setTitle("Verberg Antwoord", for: .normal)
+            self.updateUI()
             
         } else { // If not hidden when clicked
             isAnswerHidden = true
             AnswerField.isHidden = true
+            
+            // Label becomes
             HideAnswerButton.setTitle("Toon Antwoord", for: .normal)
             
         }
     }
     
     @IBAction func DidTapHideCategoryController(_ sender: UIButton) {
-        self.resetButtons()
-        self.setCategoryClasses()
+        self.toggleCategoryButtons(shouldShow: false)
+        
+        ShowCategoryButton.isHidden = false
+        HideCategoryButton.isHidden = true
     }
     
     @IBAction func DidTapShowCategoryController(_ sender: UIButton) {
-        RedButton.isHidden = false
-        OrangeButton.isHidden = false
-        YellowButton.isHidden = false
-        GreenButton.isHidden = false
-        BlueButton.isHidden = false
+        self.toggleCategoryButtons(shouldShow: true)
         
         ShowCategoryButton.isHidden = true
         HideCategoryButton.isHidden = false
     }
     
-    private func setCategoryClasses() {
-        QuestionField.textColor = .black
-        ShowCategoryButton.isHidden = false
-        HideCategoryButton.isHidden = true
-        
-        HideAnswerButton.isHidden = false
-        NextQuestionButton.isHidden = false
-        
-        switch currentCategory {
-        case "yellow":
-            YellowButton.isHidden = false
-            QuestionField.backgroundColor = .yellow
-        case "red":
-            RedButton.isHidden = false
-            QuestionField.backgroundColor = .red
-        case "orange":
-            OrangeButton.isHidden = false
-            QuestionField.backgroundColor = .orange
-        case "green":
-            GreenButton.isHidden = false
-            QuestionField.backgroundColor = .green
-        case "blue":
-            BlueButton.isHidden = false
-            QuestionField.backgroundColor = .blue
-            QuestionField.textColor = .white
-        default:
-            QuestionField.textColor = .white
-        }
-    }
-    
-    private func resetButtons() {
-        RedButton.isHidden = true
-        OrangeButton.isHidden = true
-        YellowButton.isHidden = true
-        GreenButton.isHidden = true
-        BlueButton.isHidden = true
-        
-        HideCategoryButton.isHidden = true
-        ShowCategoryButton.isHidden = true
-        
-        HideAnswerButton.isHidden = true
-        NextQuestionButton.isHidden = true
-        
-        QuestionField.backgroundColor = .black
-        QuestionField.textColor = .white
-    }
-    
+    // Displays question
     private func showQuestion() {
         let question = categoryQuestions[questionCounter]
         
         QuestionField.text = question["question"] as? String
         AnswerField.text = question["answer"] as? String
+    }
+    
+    // Runs after the user hits the Return key on the keyboard
+    func textFieldShouldReturn(_ AnswerInput: UITextField) -> Bool {
+        // Get text from text field
+        let textFieldContents = AnswerInput.text!
+        
+        let question = categoryQuestions[questionCounter]
+        let answer = question["answer"] as? String
+        
+        // Determine if user answered correct + update correct quiz state
+        if textFieldContents.lowercased() == answer?.lowercased() {
+            answerIsCorrect = true
+            correctAnswerCount += 1
+        } else {
+            answerIsCorrect = false
+        }
+        
+        // app shows answer to user
+        state = .answer
+        
+        self.updateUI()
+        
+        return true
+    }
+    
+    func displayScoreAlert() {
+        let alert = UIAlertController(title: "Quiz Score",
+                                      message: "Your score is \(correctAnswerCount) out of \(categoryQuestions.count).",
+                                      preferredStyle: .alert)
+        
+        let dismissAction = UIAlertAction(title: "OK",
+                                          style: .default,
+                                          handler: scoreAlertDismissed(_:))
+        alert.addAction(dismissAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func scoreAlertDismissed(_ action: UIAlertAction) {
+        state = .category
+        currentCategory = ""
+        self.setCategoryClasses()
+        self.updateUI()
+    }
+    
+    // SMALL FUNCTIONS
+    
+    // Toggles visbility of category buttons
+    func toggleCategoryButtons(shouldShow: Bool) {
+        RedButton.isHidden = !shouldShow
+        YellowButton.isHidden = !shouldShow
+        OrangeButton.isHidden = !shouldShow
+        GreenButton.isHidden = !shouldShow
+        BlueButton.isHidden = !shouldShow
+        
+        if shouldShow == true { return }
+        
+        switch currentCategory {
+        case "yellow":
+            YellowButton.isHidden = false
+        case "red":
+            RedButton.isHidden = false
+        case "orange":
+            OrangeButton.isHidden = false
+        case "green":
+            GreenButton.isHidden = false
+        case "blue":
+            BlueButton.isHidden = false
+        default:
+            break
+        }
+    }
+    
+    // UI CHANGES
+    
+    //
+    private func setCategoryClasses() {
+        QuestionField.textColor = .black
+        
+        switch currentCategory {
+        case "yellow":
+            QuestionField.backgroundColor = .yellow
+        case "red":
+            QuestionField.backgroundColor = .red
+        case "orange":
+            QuestionField.backgroundColor = .orange
+        case "green":
+            QuestionField.backgroundColor = .green
+        case "blue":
+            QuestionField.backgroundColor = .blue
+            QuestionField.textColor = .white
+        default:
+            QuestionField.backgroundColor = .black
+            QuestionField.textColor = .white
+        }
+    }
+    
+    func updateUI() {
+        // Text field and keyboard
+        switch state {
+        case .category:
+            AnswerInput.isHidden = true
+            AnswerInput.resignFirstResponder()
+        case .question:
+            AnswerInput.isHidden = false
+            AnswerInput.isEnabled = true
+            AnswerInput.text = ""
+            AnswerInput.becomeFirstResponder()
+        case .answer:
+            AnswerInput.isHidden = false
+            AnswerInput.isEnabled = false
+            AnswerInput.resignFirstResponder()
+        case .score:
+            AnswerInput.isHidden = true
+            AnswerInput.resignFirstResponder()
+        }
+        
+        // Answer label & field
+        switch state {
+        case .category:
+            AnswerLabel.text = "Kies een categorie"
+            AnswerField.isHidden = true
+            isAnswerHidden = true
+            HideAnswerButton.setTitle("Toon Antwoord", for: .normal)
+        case .question:
+            AnswerLabel.text = "Antwoord"
+            AnswerField.isHidden = true
+            isAnswerHidden = true
+            HideAnswerButton.setTitle("Toon Antwoord", for: .normal)
+        case .answer:
+            AnswerField.isHidden = false
+            isAnswerHidden = false
+            HideAnswerButton.setTitle("Verberg Antwoord", for: .normal)
+            if answerIsCorrect {
+                AnswerLabel.text = "Correct!"
+            } else {
+                AnswerLabel.text = "Incorrect!\nCorrect Answer:"
+            }
+        case .score:
+            AnswerLabel.text = ""
+            self.displayScoreAlert()
+            print("Your score is \(correctAnswerCount) out of \(categoryQuestions.count).")
+        }
+        
+        // Buttons
+        if questionCounter == categoryQuestions.count - 1 {
+            NextQuestionButton.setTitle("Toon Score", for: .normal)
+        } else {
+            NextQuestionButton.setTitle("Next Question", for: .normal)
+        }
+        
+        switch state {
+        case .category:
+            // Top buttons
+            NextQuestionButton.isHidden = true
+            HideAnswerButton.isHidden = true
+            
+            // Category buttons
+            self.toggleCategoryButtons(shouldShow: true)
+            
+            // Bottom buttons
+            ShowCategoryButton.isHidden = true
+            HideCategoryButton.isHidden = true
+            
+        case .question:
+            // Top buttons
+            NextQuestionButton.isHidden = false
+            NextQuestionButton.isEnabled = false
+            HideAnswerButton.isHidden = false
+            
+            // Category buttons
+            self.toggleCategoryButtons(shouldShow: false)
+            
+            // Bottom buttons
+            ShowCategoryButton.isHidden = false
+            HideCategoryButton.isHidden = true
+            
+        case .answer:
+            // Top buttons
+            NextQuestionButton.isHidden = false
+            NextQuestionButton.isEnabled = true
+            HideAnswerButton.isHidden = false
+            
+            // Bottom buttons
+        case .score:
+            // Top buttons
+            NextQuestionButton.isEnabled = false
+            NextQuestionButton.isHidden = true
+            HideAnswerButton.isHidden = true
+            
+            // Category Buttons
+            self.toggleCategoryButtons(shouldShow: false)
+            
+            // Bottom buttons
+            ShowCategoryButton.isHidden = true
+            HideCategoryButton.isHidden = true
+        }
+    }
+    
+    // Retrieve JSON data from LocalQuizData.json
+    private func setupJsonData() {
+        guard let jsonPath = Bundle.main.path(forResource: "localQuizData", ofType: "json") else { return }
+        let url = URL(fileURLWithPath: jsonPath)
+        do {
+            let data = try Data(contentsOf: url)
+            if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>] {
+                quizQuestions = jsonArray
+            } else {
+                print("bad json")
+            }
+        } catch {
+            print(error)
+        }
     }
 }
 
