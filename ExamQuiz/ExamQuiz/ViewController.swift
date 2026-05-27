@@ -44,6 +44,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     var answerIsCorrect: Bool = false
     var correctAnswerCount: Int = 0
+    var player: String = "Cas"
+    var playerScore: [String:Int] = ["red":0,"blue":0,"orange":0,"yellow":0,"green":0]
+    var scoreBoard: [String: [String: Int]] = [:]
     
     var state: State = .category
     
@@ -179,6 +182,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func displayScoreAlert() {
+        self.handleScore()
+        
         let alert = UIAlertController(title: "Quiz Score",
                                       message: "Your score is \(correctAnswerCount) out of \(categoryQuestions.count).",
                                       preferredStyle: .alert)
@@ -199,6 +204,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     // SMALL FUNCTIONS
+    
+    func handleScore() {
+        if player == "" {
+            return
+        }
+        
+        if scoreBoard.keys.contains(player) {
+            if scoreBoard[player]?[currentCategory] ?? 0 < correctAnswerCount {
+                scoreBoard[player]?[currentCategory] = correctAnswerCount
+            }
+            print(scoreBoard)
+            return
+        }
+        
+        var currentPlayerScore: [String: Int] = playerScore
+        currentPlayerScore[currentCategory] = correctAnswerCount
+        
+        scoreBoard[player] = currentPlayerScore
+        print(scoreBoard)
+    }
     
     // Toggles visbility of category buttons
     func toggleCategoryButtons(shouldShow: Bool) {
@@ -273,6 +298,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Answer label & field
         switch state {
         case .category:
+            QuestionField.text = "Question"
             AnswerLabel.text = "Kies een categorie"
             AnswerField.isHidden = true
             isAnswerHidden = true
