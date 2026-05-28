@@ -186,6 +186,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    // Display score
     func displayScoreAlert() {
         self.handleScore()
         
@@ -206,6 +207,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         present(alert, animated: true, completion: nil)
     }
     
+    // Close popups
     func scoreAlertDismissed(_ action: UIAlertAction) {
         state = .category
         currentCategory = ""
@@ -213,6 +215,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.updateUI()
     }
     
+    // Display scoreboard
     func displayScoreBoardAlert(_ action: UIAlertAction) {
         var scoreDisplay = ""
         
@@ -240,7 +243,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     // SMALL FUNCTIONS
-    
+    // Save scores
     func handleScore() {
         if player == "" {
             return
