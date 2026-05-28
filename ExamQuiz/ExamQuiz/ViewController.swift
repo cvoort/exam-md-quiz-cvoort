@@ -44,9 +44,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     var answerIsCorrect: Bool = false
     var correctAnswerCount: Int = 0
-    var player: String = "Cas"
+    var player: String = "Player"
     var playerScore: [String:Int] = ["red":0,"blue":0,"orange":0,"yellow":0,"green":0]
-    var scoreBoard: [String: [String: Int]] = [:]
+    var scoreBoard: [String: [String: Int]] = ["red":[:],"blue":[:],"orange":[:],"yellow":[:],"green":[:]]
     
     var state: State = .category
     
@@ -162,6 +162,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Get text from text field
         let textFieldContents = AnswerInput.text!
         
+        if state == .category {
+            player = textFieldContents.lowercased()
+            return true
+        }
+        
         let question = categoryQuestions[questionCounter]
         let answer = question["answer"] as? String
         
@@ -185,13 +190,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.handleScore()
         
         let alert = UIAlertController(title: "Quiz Score",
-                                      message: "Your score is \(correctAnswerCount) out of \(categoryQuestions.count).",
+                                      message: "Uw score is \(correctAnswerCount) van de \(categoryQuestions.count).",
                                       preferredStyle: .alert)
         
-        let dismissAction = UIAlertAction(title: "OK",
+        let dismissAction = UIAlertAction(title: "Sluiten",
                                           style: .default,
                                           handler: scoreAlertDismissed(_:))
         alert.addAction(dismissAction)
+        
+        let scoreAction = UIAlertAction(title: "Toon Scorebord",
+                                        style: .default,
+                                        handler: displayScoreBoardAlert(_:))
+        alert.addAction(scoreAction)
         
         present(alert, animated: true, completion: nil)
     }
@@ -203,6 +213,32 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.updateUI()
     }
     
+    func displayScoreBoardAlert(_ action: UIAlertAction) {
+        var scoreDisplay = ""
+        
+        let categoryScores: [String: Int] = scoreBoard[currentCategory] ?? [:]
+        let sortedScores = categoryScores.sorted(by: { $0.value > $1.value })
+        let topScores = sortedScores.prefix(4)
+        
+        var i = 1
+        for (index, value) in topScores {
+            scoreDisplay += "\(i). \(index): \(value) \n"
+            i += 1
+        }
+        
+        let scoreBoardAlert = UIAlertController(title: "Scorebord",
+                                                message: scoreDisplay,
+                                                preferredStyle: .alert)
+        
+        let dismissAction = UIAlertAction(title: "Sluiten",
+                                          style: .default,
+                                          handler: scoreAlertDismissed(_:))
+        
+        scoreBoardAlert.addAction(dismissAction)
+        
+        present(scoreBoardAlert, animated: true, completion: nil)
+    }
+    
     // SMALL FUNCTIONS
     
     func handleScore() {
@@ -210,18 +246,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        if scoreBoard.keys.contains(player) {
-            if scoreBoard[player]?[currentCategory] ?? 0 < correctAnswerCount {
-                scoreBoard[player]?[currentCategory] = correctAnswerCount
+        if (scoreBoard[currentCategory]?.keys.contains(player) ?? false) {
+            if scoreBoard[currentCategory]?[player] ?? 0 < correctAnswerCount {
+                scoreBoard[currentCategory]?[player] = correctAnswerCount
             }
             print(scoreBoard)
             return
         }
         
-        var currentPlayerScore: [String: Int] = playerScore
-        currentPlayerScore[currentCategory] = correctAnswerCount
+        var currentCategoryScore: [String: Int] = scoreBoard[currentCategory] ?? [:]
+        currentCategoryScore[player] = correctAnswerCount
         
-        scoreBoard[player] = currentPlayerScore
+        scoreBoard[currentCategory] = currentCategoryScore
         print(scoreBoard)
     }
     
@@ -279,8 +315,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Text field and keyboard
         switch state {
         case .category:
-            AnswerInput.isHidden = true
-            AnswerInput.resignFirstResponder()
+            AnswerInput.isHidden = false
+            AnswerInput.isEnabled = true
+            AnswerInput.text = player
+            AnswerInput.becomeFirstResponder()
         case .question:
             AnswerInput.isHidden = false
             AnswerInput.isEnabled = true
@@ -298,8 +336,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Answer label & field
         switch state {
         case .category:
-            QuestionField.text = "Question"
-            AnswerLabel.text = "Kies een categorie"
+            QuestionField.text = "Kies een categorie"
+            AnswerLabel.text = "Vul je naam in"
             AnswerField.isHidden = true
             isAnswerHidden = true
             HideAnswerButton.setTitle("Toon Antwoord", for: .normal)
@@ -315,7 +353,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             if answerIsCorrect {
                 AnswerLabel.text = "Correct!"
             } else {
-                AnswerLabel.text = "Incorrect!\nCorrect Answer:"
+                AnswerLabel.text = "Incorrect!\nCorrect Antwoord:"
             }
         case .score:
             AnswerLabel.text = ""
@@ -327,7 +365,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if questionCounter == categoryQuestions.count - 1 {
             NextQuestionButton.setTitle("Toon Score", for: .normal)
         } else {
-            NextQuestionButton.setTitle("Next Question", for: .normal)
+            NextQuestionButton.setTitle("Volgende Vraag", for: .normal)
         }
         
         switch state {
